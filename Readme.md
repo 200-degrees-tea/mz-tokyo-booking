@@ -1,1 +1,3 @@
-Tokyo booking
+# Tokyo booking
+
+JavaScript educational project
