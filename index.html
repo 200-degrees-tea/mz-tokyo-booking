@@ -100,11 +100,11 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="title">Listing title</label>
-          <input id="title" name="title" type="text" placeholder="Small and cosy flat in the center of Tokyo">
+          <input id="title" name="title" type="text" placeholder="Small and cosy flat in the center of Tokyo" minlength="30" maxlength="100" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Address</label>
-          <input id="address" name="address" type="text">
+          <input id="address" name="address" type="text" readonly>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Type of housing</label>
@@ -117,19 +117,19 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="price">Price per night, &#163;</label>
-          <input id="price" name="price" type="number" placeholder="5000">
+          <input id="price" name="price" type="number" placeholder="10" min="0" max="100" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--time">
           <label class="ad-form__label" for="timein">Check-in and check-out times</label>
           <select id="timein" name="timein">
-            <option value="12:00" selected>Before 12</option>
-            <option value="13:00">Before 13</option>
-            <option value="14:00">Before 14</option>
-          </select>
-          <select id="timeout" name="timeout" title="Time to check-out">
             <option value="12:00" selected>After 12</option>
             <option value="13:00">After 13</option>
             <option value="14:00">After 14</option>
+          </select>
+          <select id="timeout" name="timeout" title="Time to check-out">
+            <option value="12:00" selected>Before 12</option>
+            <option value="13:00">Before 13</option>
+            <option value="14:00">Before 14</option>
           </select>
         </fieldset>
         <fieldset class="ad-form__element">
