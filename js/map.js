@@ -6,7 +6,7 @@
   var MAX_PRICE = 100;
   var MIN_GUESTS = 1;
   var MAX_GUESTS = 10;
-  var MIN_MAP_WIDTH = 50;
+  var MIN_MAP_WIDTH = 0;
   var MAX_MAP_WIDTH = 1150;
   var MIN_MAP_HEIGHT = 130;
   var MAX_MAP_HEIGHT = 630;
@@ -52,6 +52,12 @@
   var checkoutElement = adFormContainer.querySelector('#timeout');
   var capacityElement = adFormContainer.querySelector('#capacity');
   var roomsElement = adFormContainer.querySelector('#room_number');
+
+  var dragged = false;
+  var startCords = {
+    x: 0,
+    y: 0
+  };
 
   function getRandomNumberInRange(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -150,15 +156,11 @@
     return newCardElement;
   }
 
-  function updateAddress(position) {
-    formAddressInput.value = position.top + ', ' + position.left;
-  }
+  function updateAddress() {
+    var top = mapPinsMainElement.offsetTop + PIN_HIGHT;
+    var left = mapPinsMainElement.offsetLeft + HALF_PIN_WIDTH;
 
-  function getPinLocation(element) {
-    return {
-      top: element.offsetTop + PIN_HIGHT,
-      left: element.offsetLeft + HALF_PIN_WIDTH
-    };
+    formAddressInput.value = top + ', ' + left;
   }
 
   function setFormInputsState(enable) {
@@ -194,19 +196,20 @@
   }
 
   function mouseUpHandler(event) {
-    var currentTarget = event.currentTarget;
+    event.preventDefault();
     var generatedPinElements = generatePins();
-    var pinLocation = getPinLocation(currentTarget);
 
-    mapElement.classList.remove('map--faded');
-    adFormContainer.classList.remove('ad-form--disabled');
-    enableFormInputs();
-    updateAddress(pinLocation);
+    updateAddress();
     mapPinsElement.appendChild(generatedPinElements);
-    currentTarget.removeEventListener('mouseup', mouseUpHandler);
     checkGuestsField();
-  }
 
+    document.removeEventListener('mouseup', mouseUpHandler);
+    document.removeEventListener('mousemove', mouseMoveHandler);
+
+    if (dragged) {
+      mapPinsMainElement.addEventListener('click', clickPreventDefaultHandler);
+    }
+  }
 
   function showCard(button) {
     var elementIndex = +button.dataset.index;
@@ -279,9 +282,64 @@
     checkGuestsField();
   }
 
+  function mouseMoveHandler(event) {
+    event.preventDefault();
+    dragged = true;
+    var shift = {
+      x: startCords.x - event.clientX,
+      y: startCords.y - event.clientY
+    };
+    var newXPosition = mapPinsMainElement.offsetLeft - shift.x;
+    var newYPosition = mapPinsMainElement.offsetTop - shift.y;
+
+    startCords = {
+      x: event.clientX,
+      y: event.clientY
+    };
+
+    if (newXPosition < MIN_MAP_WIDTH) {
+      mapPinsMainElement.style.left = MIN_MAP_WIDTH + 'px';
+    } else if (newXPosition > MAX_MAP_WIDTH) {
+      mapPinsMainElement.style.left = MAX_MAP_WIDTH + 'px';
+    } else {
+      mapPinsMainElement.style.left = newXPosition + 'px';
+    }
+
+    if (newYPosition < MIN_MAP_HEIGHT) {
+      mapPinsMainElement.style.top = MIN_MAP_HEIGHT + 'px';
+    } else if (newYPosition > MAX_MAP_HEIGHT) {
+      mapPinsMainElement.style.top = MAX_MAP_HEIGHT + 'px';
+    } else {
+      mapPinsMainElement.style.top = newYPosition + 'px';
+    }
+
+    updateAddress();
+  }
+
+  function mouseDownHandler(event) {
+    event.preventDefault();
+
+    startCords = {
+      x: event.clientX,
+      y: event.clientY
+    };
+
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+
+    mapElement.classList.remove('map--faded');
+    adFormContainer.classList.remove('ad-form--disabled');
+    enableFormInputs();
+  }
+
+  function clickPreventDefaultHandler(event) {
+    event.preventDefault();
+    mapPinsMainElement.removeEventListener('click', clickPreventDefaultHandler);
+  }
+
   disableFormInputs();
 
-  mapPinsMainElement.addEventListener('mouseup', mouseUpHandler);
+  mapPinsMainElement.addEventListener('mousedown', mouseDownHandler);
 
   var nearbyLisitings = [];
   for (var i = 0; i < ADS_AMOUNT; i++) {
