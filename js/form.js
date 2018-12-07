@@ -87,7 +87,7 @@ window.form = (function () {
     checkGuestsField: function () {
       var guests = +capacityElement.value;
       var numberOfRooms = +roomsElement.value;
-  
+
       if (numberOfRooms === 1 && guests !== 1) {
         capacityElement.setCustomValidity('Too many guests for one room');
       } else if (numberOfRooms === 2 && guests > 2) {
@@ -100,5 +100,5 @@ window.form = (function () {
         capacityElement.setCustomValidity('');
       }
     }
-  }
+  };
 }());
