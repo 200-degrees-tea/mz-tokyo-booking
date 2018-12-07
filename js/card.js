@@ -36,24 +36,6 @@ window.card = (function () {
     return newCardElement;
   }
 
-  // function showCard(button) {
-  //   var elementIndex = +button.dataset.index;
-  //   var listing = nearbyLisitings[elementIndex];
-  //   var card = generateCard(listing);
-
-  //   mapElement.appendChild(card);
-  //   card.querySelector('.popup__close').addEventListener('click', closeCardHandler);
-  //   button.classList.add('map__pin--active');
-  // }
-
-  // function removeCard() {
-  //   var cardElement = mapElement.querySelector('.map__card');
-  //   if (cardElement) {
-  //     cardElement.parentNode.removeChild(cardElement);
-  //     mapElement.querySelector('.map__pin--active').classList.remove('map__pin--active');
-  //   }
-  // }
-  
   function closeCardHandler(event) {
     window.card.removeCard();
     event.currentTarget.removeEventListener('click', closeCardHandler);
