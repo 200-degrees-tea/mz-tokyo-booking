@@ -44,7 +44,7 @@ window.card = (function () {
   return {
     showCard: function (button) {
       var elementIndex = +button.dataset.index;
-      var listing = window.map.nearbyLisitings[elementIndex];
+      var listing = window.data.nearbyLisitings[elementIndex];
       var card = generateCard(listing);
 
       mapElement.appendChild(card);
