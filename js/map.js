@@ -2,8 +2,6 @@
 window.map = (function () {
   var mapElement = document.querySelector('.map');
   var mapPinsElement = document.querySelector('.map__pins');
-  var pinElementTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-
   var adFormContainer = document.querySelector('.ad-form');
   var mapPinsMainElement = mapPinsElement.querySelector('.map__pin--main');
   var dragged = false;
@@ -12,25 +10,9 @@ window.map = (function () {
     y: 0
   };
 
-  function generatePins() {
-    var pinDocFrag = document.createDocumentFragment();
-    for (var i = 0; i < nearbyLisitings.length; i++) {
-      var newPinElement = pinElementTemplate.cloneNode(true);
-      var newImgElement = newPinElement.querySelector('img');
-      newPinElement.style.left = nearbyLisitings[i].location.x + 'px';
-      newPinElement.style.top = nearbyLisitings[i].location.y + 'px';
-      newPinElement.setAttribute('data-index', i);
-      newImgElement.src = nearbyLisitings[i].author.avatar;
-      newImgElement.alt = nearbyLisitings[i].offer.title;
-      pinDocFrag.appendChild(newPinElement);
-    }
-
-    return pinDocFrag;
-  }
-
   function mouseUpHandler(event) {
     event.preventDefault();
-    var generatedPinElements = generatePins();
+    var generatedPinElements = window.pin.generatePins();
 
     window.form.updateAddress();
     mapPinsElement.appendChild(generatedPinElements);
@@ -41,19 +23,6 @@ window.map = (function () {
 
     if (dragged) {
       mapPinsMainElement.addEventListener('click', clickPreventDefaultHandler);
-    }
-  }
-
-  function pinsHandler(event) {
-    var target = event.target;
-
-    while (target !== mapElement) {
-      if (target.tagName === 'BUTTON' && target.hasAttribute('data-index')) {
-        window.card.removeCard();
-        window.card.showCard(target);
-        return;
-      }
-      target = target.parentNode;
     }
   }
 
@@ -113,16 +82,9 @@ window.map = (function () {
   }
 
   mapPinsMainElement.addEventListener('mousedown', mouseDownHandler);
-
-  var nearbyLisitings = [];
-  for (var i = 0; i < window.data.ADS_AMOUNT; i++) {
-    var newListing = window.data.getListingsObject(i);
-    nearbyLisitings.push(newListing);
-  }
-
-  mapElement.addEventListener('mouseup', pinsHandler);
+  mapElement.addEventListener('mouseup', window.pin.pinsHandler);
 
   return {
-    nearbyLisitings: nearbyLisitings
+    mapElement: mapElement,
   };
 }());
