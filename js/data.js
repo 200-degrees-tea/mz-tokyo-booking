@@ -51,7 +51,7 @@ window.data = (function () {
     });
   }
 
-  function getListingsObject (index) {
+  function getListingsObject(index) {
     var positionX = getRandomNumberInRange(MIN_MAP_WIDTH, MAX_MAP_WIDTH);
     var positionY = getRandomNumberInRange(MIN_MAP_HEIGHT, MAX_MAP_HEIGHT);
 
