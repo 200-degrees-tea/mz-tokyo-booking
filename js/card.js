@@ -41,6 +41,13 @@ window.card = (function () {
     event.currentTarget.removeEventListener('click', closeCardHandler);
   }
 
+  function escPressCloseCardHandler(event) {
+    if (event.keyCode === 27) {
+      window.card.removeCard();
+      window.card.querySelector('popup__close').removeEventListener('click', closeCardHandler);
+    }
+  }
+
   return {
     showCard: function (button) {
       var elementIndex = +button.dataset.index;
@@ -49,6 +56,7 @@ window.card = (function () {
 
       mapElement.appendChild(card);
       card.querySelector('.popup__close').addEventListener('click', closeCardHandler);
+      document.addEventListener('keydown', escPressCloseCardHandler);
       button.classList.add('map__pin--active');
     },
 
