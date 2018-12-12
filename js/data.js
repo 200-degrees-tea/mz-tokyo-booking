@@ -1,4 +1,5 @@
 'use strict';
+// Depricated module - used before network module
 window.data = (function () {
   var MIN_NUM_ROOMS = 1;
   var MAX_NUM_ROOMS = 5;

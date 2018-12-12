@@ -2,15 +2,13 @@
 window.form = (function () {
   var PIN_HIGHT = 62 + 22;
   var HALF_PIN_WIDTH = 31 + 5;
-
   var BUNGALO_MIN_PRICE = 0;
-  var FLAT_MIN_PRICE = 10;
-  var HOUSE_MIN_PRICE = 50;
-  var PALACE_MIN_PRICE = 100;
+  var FLAT_MIN_PRICE = 1000;
+  var HOUSE_MIN_PRICE = 5000;
+  var PALACE_MIN_PRICE = 10000;
 
   var mapPinsMainElement = document.querySelector('.map__pin--main');
   var adFormContainer = document.querySelector('.ad-form');
-
   var formAddressInput = adFormContainer.querySelector('#address');
   var priceElement = adFormContainer.querySelector('#price');
   var propertyTypeElement = adFormContainer.querySelector('#type');
@@ -65,11 +63,37 @@ window.form = (function () {
     setFormInputsState(false);
   }
 
+  function resetPage() {
+    adFormContainer.reset();
+    disableFormInputs();
+    window.map.resetMap();
+  }
+
+  function successSendHandler() {
+    window.message.successMessage();
+    resetPage();
+  }
+
+  function formErrBtnHandler() {
+    var data = new FormData(adFormContainer);
+    window.network.send(data, successSendHandler, window.message.errorMessage, formErrBtnHandler);
+    var errorElement = document.querySelector('.error');
+    event.target.removeEventListener('click', formErrBtnHandler);
+    document.querySelector('body').removeChild(errorElement);
+  }
+
+  function submitFormHandler(event) {
+    event.preventDefault();
+    var data = new FormData(adFormContainer);
+    window.network.send(data, successSendHandler, window.message.errorMessage, formErrBtnHandler);
+  }
+
   propertyTypeElement.addEventListener('change', typeFieldHandler);
   checkinElement.addEventListener('change', checkinHandler);
   checkoutElement.addEventListener('change', checkoutHandler);
   roomsElement.addEventListener('change', guestsHandler);
   capacityElement.addEventListener('change', guestsHandler);
+  adFormContainer.addEventListener('submit', submitFormHandler);
 
   disableFormInputs();
 

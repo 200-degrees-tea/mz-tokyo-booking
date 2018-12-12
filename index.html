@@ -84,7 +84,7 @@
     <!-- Form -->
     <section class="notice">
       <h2 class="notice__title">Your Listing</h2>
-      <form class="ad-form ad-form--disabled" method="post" enctype="multipart/form-data" autocomplete="off">
+      <form class="ad-form ad-form--disabled"  method="post" enctype="multipart/form-data" autocomplete="off">
         <fieldset class="ad-form-header">
           <legend class="ad-form-header__title">Your photo (for the map)</legend>
           <div class="ad-form-header__upload">
@@ -116,8 +116,8 @@
           </select>
         </fieldset>
         <fieldset class="ad-form__element">
-          <label class="ad-form__label" for="price">Price per night, &#163;</label>
-          <input id="price" name="price" type="number" placeholder="10" min="0" max="100" required>
+          <label class="ad-form__label" for="price">Price per night, &#165;</label>
+          <input id="price" name="price" type="number" placeholder="1000" min="0" max="1000000" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--time">
           <label class="ad-form__label" for="timein">Check-in and check-out times</label>
@@ -247,8 +247,10 @@
       <button class="error__button" href="#">Try again.</button>
     </div>
   </template>
-  <script src="js/data.js"></script>
+  <script src="js/network.js"></script>
+  <script src="js/util.js"></script>
   <script src="js/pin.js"></script>
+  <script src="js/message.js"></script>
   <script src="js/map.js"></script>
   <script src="js/form.js"></script>
   <script src="js/card.js"></script>
