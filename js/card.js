@@ -14,7 +14,7 @@ window.card = (function () {
 
       newCardElement.querySelector('.popup__title').textContent = offer.title;
       newCardElement.querySelector('.popup__text--address').textContent = offer.address;
-      newCardElement.querySelector('.popup__text--price').textContent = offer.price + ' £/night';
+      newCardElement.querySelector('.popup__text--price').textContent = offer.price + ' \u00A5/night';
       newCardElement.querySelector('.popup__type').textContent = offer.type.charAt(0).toUpperCase() + offer.type.slice(1);
       newCardElement.querySelector('.popup__text--capacity').textContent = offer.rooms + ' rooms for ' + offer.guests;
       newCardElement.querySelector('.popup__text--time').textContent = 'Checking after ' + offer.checkin + ', checkout before ' + offer.checkout;

@@ -4,6 +4,8 @@ window.map = (function () {
   var MAX_MAP_WIDTH = 1150;
   var MIN_MAP_HEIGHT = 130;
   var MAX_MAP_HEIGHT = 630;
+  var MAP_PIN_TOP = 375;
+  var MAP_PIN_LEFT = 570;
   var mapElement = document.querySelector('.map');
   var mapPinsElement = document.querySelector('.map__pins');
   var adFormContainer = document.querySelector('.ad-form');
@@ -13,19 +15,58 @@ window.map = (function () {
     x: 0,
     y: 0
   };
+  var isPageActive = false;
+  var data = [];
+
+  function translateData(receivedData) {
+    receivedData[0].offer.title = 'Cozy nest for newlyweds';
+    receivedData[0].offer.description = 'Gorgeous townhouse in downtown Tokyo. Suitable for both tourists and businessmen. The house is fully equipped and has a fresh renovation.';
+    receivedData[1].offer.title = 'Small apartment near the park';
+    receivedData[1].offer.description = 'Small clean apartment on the edge of the park. Without the Internet and registration.';
+    receivedData[2].offer.title = 'A bench in the park';
+    receivedData[2].offer.description = 'Great bench in the middle of the park. Suitable for people who like to sleep in the fresh air.';
+    receivedData[3].offer.title = 'Imperial Palace in downtown Tokyo';
+    receivedData[3].offer.description = 'Wonderful palace in the old city center. Only for those who can afford the palace.';
+    receivedData[4].offer.title = 'Sweetest attic';
+    receivedData[4].offer.description = 'Small apartment in the attic. For the most demanding.';
+    receivedData[5].offer.title = 'Coffee lovers hangout';
+    receivedData[5].offer.description = 'We have all! Coffee, internet and more coffee';
+    receivedData[6].offer.title = 'Clear hut';
+    receivedData[6].offer.description = 'We have all nishtyak here. Stall around the corner. shops open for 24 hours. Come on! Internet connection not provided!';
+    receivedData[7].offer.title = 'Apartment in the center';
+    receivedData[7].offer.description = 'It is beautiful, light and cozy. It can accommodate 5 people. Coffee and cookies provided for free.';
+    receivedData[8].offer.title = 'Quiet apartment near the subway';
+    receivedData[8].offer.description = 'Apartment on the first floor. Neighbors are quiet. For anyone who can not stand the hustle and bustle.';
+    receivedData[9].offer.title = 'Cute nest for Anime fans';
+    receivedData[9].offer.description = 'Enjoy your time nad please do not disturb others.';
+    return receivedData;
+  }
+
+  function reciveErrBtnHandler(event) {
+    window.network.receive(receiveDataHandler, window.message.errorMessage, reciveErrBtnHandler);
+    var errorElement = document.querySelector('.error');
+    event.target.removeEventListener('click', reciveErrBtnHandler);
+    document.querySelector('body').removeChild(errorElement);
+  }
+
+  function receiveDataHandler(responseData) {
+    var jsonData = JSON.parse(responseData);
+    data = translateData(jsonData);
+
+    var generatedPinElements = document.createDocumentFragment();
+
+    data.forEach(function (pinData, index) {
+      var newPin = window.pin.generatePin(pinData, index);
+      generatedPinElements.appendChild(newPin);
+    });
+
+    mapPinsElement.appendChild(generatedPinElements);
+  }
 
   function mouseUpHandler(event) {
     event.preventDefault();
-    var generatedPinElements = document.createDocumentFragment();
-
-    for (var i = 0; i < window.data.nearbyLisitings.length; i++) {
-      var pinData = window.data.nearbyLisitings[i];
-      var newPin = window.pin.generatePin(pinData, i);
-      generatedPinElements.appendChild(newPin);
-    }
 
     window.form.updateAddress();
-    mapPinsElement.appendChild(generatedPinElements);
     window.form.checkGuestsField();
 
     document.removeEventListener('mouseup', mouseUpHandler);
@@ -81,9 +122,13 @@ window.map = (function () {
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
 
-    mapElement.classList.remove('map--faded');
-    adFormContainer.classList.remove('ad-form--disabled');
-    window.form.enableFormInputs();
+    if (!isPageActive) {
+      isPageActive = true;
+      window.network.receive(receiveDataHandler, window.message.errorMessage, reciveErrBtnHandler);
+      mapElement.classList.remove('map--faded');
+      adFormContainer.classList.remove('ad-form--disabled');
+      window.form.enableFormInputs();
+    }
   }
 
   function clickPreventDefaultHandler(event) {
@@ -94,18 +139,16 @@ window.map = (function () {
   function closeCardHandler(event) {
     removeCard();
     event.currentTarget.removeEventListener('click', closeCardHandler);
+    document.removeEventListener('keydown', escPressCloseCardHandler);
   }
 
   function escPressCloseCardHandler(event) {
-    if (event.keyCode === 27) {
-      document.querySelector('.popup__close').removeEventListener('click', closeCardHandler);
-      removeCard();
-    }
+    window.util.isEscEvent(event, removeCard);
   }
 
   function showCard(button) {
     var elementIndex = +button.dataset.index;
-    var listing = window.data.nearbyLisitings[elementIndex];
+    var listing = data[elementIndex];
     var card = window.card.generateCard(listing);
 
     mapElement.appendChild(card);
@@ -117,6 +160,8 @@ window.map = (function () {
   function removeCard() {
     var cardElement = mapElement.querySelector('.map__card');
     if (cardElement) {
+      document.querySelector('.popup__close').removeEventListener('click', closeCardHandler);
+      document.removeEventListener('keydown', escPressCloseCardHandler);
       cardElement.parentNode.removeChild(cardElement);
       mapElement.querySelector('.map__pin--active').classList.remove('map__pin--active');
     }
@@ -135,6 +180,37 @@ window.map = (function () {
     }
   }
 
+  function resetMap() {
+    dragged = false;
+    startCords = {
+      x: 0,
+      y: 0
+    };
+    isPageActive = false;
+
+    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    mapPinsMainElement.style.top = MAP_PIN_TOP + 'px';
+    mapPinsMainElement.style.left = MAP_PIN_LEFT + 'px';
+    mapElement.classList.add('map--faded');
+    adFormContainer.classList.add('ad-form--disabled');
+
+    if (mapElement.querySelector('.popup')) {
+      document.querySelector('.popup__close').removeEventListener('click', closeCardHandler);
+      document.removeEventListener('keydown', escPressCloseCardHandler);
+      removeCard();
+    }
+
+    Array.prototype.forEach.call(mapPins, function (elem) {
+      elem.parentElement.removeChild(elem);
+    });
+  }
+
+  mapPinsMainElement.style.left = MAP_PIN_LEFT + 'px';
+  mapPinsMainElement.style.top = MAP_PIN_TOP + 'px';
   mapPinsMainElement.addEventListener('mousedown', mouseDownHandler);
   mapElement.addEventListener('mouseup', pinsHandler);
+
+  return {
+    resetMap: resetMap
+  };
 }());
