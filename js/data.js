@@ -86,39 +86,6 @@ window.data = (function () {
   }
 
   return {
-    // ADS_AMOUNT: ADS_AMOUNT,
-    MIN_MAP_WIDTH: MIN_MAP_WIDTH,
-    MAX_MAP_WIDTH: MAX_MAP_WIDTH,
-    MIN_MAP_HEIGHT: MIN_MAP_HEIGHT,
-    MAX_MAP_HEIGHT: MAX_MAP_HEIGHT,
     nearbyLisitings: nearbyLisitings,
-
-    // getListingsObject: function (index) {
-    //   var positionX = getRandomNumberInRange(MIN_MAP_WIDTH, MAX_MAP_WIDTH);
-    //   var positionY = getRandomNumberInRange(MIN_MAP_HEIGHT, MAX_MAP_HEIGHT);
-
-    //   return {
-    //     author: {
-    //       avatar: 'img/avatars/user0' + (index + 1) + '.png'
-    //     },
-    //     offer: {
-    //       title: TITLES[index],
-    //       address: '"' + positionX + ', ' + positionY + '"',
-    //       price: getRandomNumberInRange(MIN_PRICE, MAX_PRICE),
-    //       type: PROPERTY_TYPES[getRandomNumberInRange(0, PROPERTY_TYPES.length)],
-    //       rooms: getRandomNumberInRange(MIN_NUM_ROOMS, MAX_NUM_ROOMS),
-    //       guests: getRandomNumberInRange(MIN_GUESTS, MAX_GUESTS),
-    //       checkin: CHECKIN_TIMES[getRandomNumberInRange(0, CHECKIN_TIMES.length)],
-    //       checkout: CHECKOUT_TIMES[getRandomNumberInRange(0, CHECKOUT_TIMES.length)],
-    //       features: getSortedRandomStringsArray(FEATURES),
-    //       description: '',
-    //       photos: getRandomStringsArray(PHOTOS),
-    //     },
-    //     location: {
-    //       x: positionX,
-    //       y: positionY
-    //     }
-    //   };
-    // },
   };
 }());
