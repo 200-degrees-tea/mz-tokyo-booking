@@ -6,6 +6,7 @@ window.map = (function () {
   var MAX_MAP_HEIGHT = 630;
   var MAP_PIN_TOP = 375;
   var MAP_PIN_LEFT = 570;
+  var MAX_PIN_ON_THE_MAP = 4;
   var mapElement = document.querySelector('.map');
   var mapPinsElement = document.querySelector('.map__pins');
   var adFormContainer = document.querySelector('.ad-form');
@@ -17,6 +18,7 @@ window.map = (function () {
   };
   var isPageActive = false;
   var data = [];
+  var filteredData = [];
 
   function translateData(receivedData) {
     receivedData[0].offer.title = 'Cozy nest for newlyweds';
@@ -49,18 +51,31 @@ window.map = (function () {
     document.querySelector('body').removeChild(errorElement);
   }
 
-  function receiveDataHandler(responseData) {
-    var jsonData = JSON.parse(responseData);
-    data = translateData(jsonData);
-
+  function renderPins(receivedData) {
     var generatedPinElements = document.createDocumentFragment();
 
-    data.forEach(function (pinData, index) {
+    receivedData.forEach(function (pinData, index) {
+      if (index > MAX_PIN_ON_THE_MAP) {
+        return;
+      }
       var newPin = window.pin.generatePin(pinData, index);
       generatedPinElements.appendChild(newPin);
     });
 
     mapPinsElement.appendChild(generatedPinElements);
+  }
+
+  function receiveDataHandler(responseData) {
+    var jsonData = JSON.parse(responseData);
+    data = translateData(jsonData);
+    renderPins(data);
+  }
+
+  function applyFilter() {
+    filteredData = window.filter.filterAds(data);
+    removeCard();
+    removePins();
+    renderPins(filteredData);
   }
 
   function mouseUpHandler(event) {
@@ -136,19 +151,19 @@ window.map = (function () {
     mapPinsMainElement.removeEventListener('click', clickPreventDefaultHandler);
   }
 
+  function escPressCloseCardHandler(event) {
+    window.util.isEscEvent(event, removeCard);
+  }
+
   function closeCardHandler(event) {
     removeCard();
     event.currentTarget.removeEventListener('click', closeCardHandler);
     document.removeEventListener('keydown', escPressCloseCardHandler);
   }
 
-  function escPressCloseCardHandler(event) {
-    window.util.isEscEvent(event, removeCard);
-  }
-
   function showCard(button) {
     var elementIndex = +button.dataset.index;
-    var listing = data[elementIndex];
+    var listing = filteredData[elementIndex];
     var card = window.card.generateCard(listing);
 
     mapElement.appendChild(card);
@@ -180,6 +195,15 @@ window.map = (function () {
     }
   }
 
+  function removePins() {
+    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    if (mapPins.length > 0) {
+      Array.prototype.forEach.call(mapPins, function (elem) {
+        elem.parentElement.removeChild(elem);
+      });
+    }
+  }
+
   function resetMap() {
     dragged = false;
     startCords = {
@@ -188,21 +212,14 @@ window.map = (function () {
     };
     isPageActive = false;
 
-    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     mapPinsMainElement.style.top = MAP_PIN_TOP + 'px';
     mapPinsMainElement.style.left = MAP_PIN_LEFT + 'px';
     mapElement.classList.add('map--faded');
     adFormContainer.classList.add('ad-form--disabled');
 
-    if (mapElement.querySelector('.popup')) {
-      document.querySelector('.popup__close').removeEventListener('click', closeCardHandler);
-      document.removeEventListener('keydown', escPressCloseCardHandler);
-      removeCard();
-    }
-
-    Array.prototype.forEach.call(mapPins, function (elem) {
-      elem.parentElement.removeChild(elem);
-    });
+    window.filter.resetFilters();
+    removeCard();
+    removePins();
   }
 
   mapPinsMainElement.style.left = MAP_PIN_LEFT + 'px';
@@ -211,6 +228,7 @@ window.map = (function () {
   mapElement.addEventListener('mouseup', pinsHandler);
 
   return {
-    resetMap: resetMap
+    resetMap: resetMap,
+    applyFilter: applyFilter
   };
 }());
