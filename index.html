@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/normalize.css">
@@ -7,6 +8,7 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Keksobooking</title>
 </head>
+
 <body>
 
   <main>
@@ -30,7 +32,9 @@
               <path d="M35,35m-23,0a23,23 0 1,1 46,0a23,23 0 1,1 -46,0" id="tophalf" />
             </defs>
             <ellipse cx="35" cy="35" rx="35" ry="35" fill="rgba(255, 86, 53, 0.7)" />
-            <text><textPath xlink:href="#tophalf" startOffset="0">Move me somewhere</textPath></text>
+            <text>
+              <textPath xlink:href="#tophalf" startOffset="0">Move me somewhere</textPath>
+            </text>
           </svg>
         </button>
       </div>
@@ -47,9 +51,9 @@
           </select>
           <select name="housing-price" id="housing-price" class="map__filter">
             <option value="any" selected>Any</option>
-            <option value="middle">10000 - 50000&#163;</option>
-            <option value="low">up to 10000&#163;</option>
-            <option value="high">more than 50000&#163;</option>
+            <option value="middle">10000 - 50000&#165;</option>
+            <option value="low">up to 10000&#165;</option>
+            <option value="high">more than 50000&#165;</option>
           </select>
           <select name="housing-rooms" id="housing-rooms" class="map__filter">
             <option value="any" selected>Any number of rooms</option>
@@ -76,7 +80,7 @@
             <label class="map__feature map__feature--elevator" for="filter-elevator">Elevator</label>
             <input type="checkbox" name="features" value="conditioner" id="filter-conditioner" class="map__checkbox visually-hidden">
             <label class="map__feature map__feature--conditioner" for="filter-conditioner">Conditioner</label>
-           </fieldset>
+          </fieldset>
         </form>
       </div>
     </section>
@@ -84,7 +88,7 @@
     <!-- Form -->
     <section class="notice">
       <h2 class="notice__title">Your Listing</h2>
-      <form class="ad-form ad-form--disabled"  method="post" enctype="multipart/form-data" autocomplete="off">
+      <form class="ad-form ad-form--disabled" method="post" enctype="multipart/form-data" autocomplete="off">
         <fieldset class="ad-form-header">
           <legend class="ad-form-header__title">Your photo (for the map)</legend>
           <div class="ad-form-header__upload">
@@ -95,12 +99,14 @@
               <input type="file" id="avatar" name="avatar" class="ad-form-header__input visually-hidden">
               <label class="ad-form-header__drop-zone" for="avatar">Upload or drag-and-drop your photo here</label>
             </div>
-            <p class="ad-form-header__info">It’s free and easy to create a listing. Describe your space, how many guests you can accommodate, and add photos and details. </p>
+            <p class="ad-form-header__info">It’s free and easy to create a listing. Describe your space, how many
+              guests you can accommodate, and add photos and details. </p>
           </div>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="title">Listing title</label>
-          <input id="title" name="title" type="text" placeholder="Small and cosy flat in the center of Tokyo" minlength="30" maxlength="100" required>
+          <input id="title" name="title" type="text" placeholder="Small and cosy flat in the center of Tokyo" minlength="30"
+            maxlength="100" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Address</label>
@@ -192,7 +198,8 @@
       <a class="copyright__link copyright__link--image" href="https://htmlacademy.ru/intensive/javascript">
         <img src="img/htmla-logo.svg" width="130" height="45" alt="HTML Academy" class="copyright__logo">
       </a>
-      <p>Created in <a class="copyright__link copyright__link--text" href="https://htmlacademy.ru/intensive/javascript">HTMLAcademy</a> &copy; 2018</p>
+      <p>Created in <a class="copyright__link copyright__link--text" href="https://htmlacademy.ru/intensive/javascript">HTMLAcademy</a>
+        &copy; 2018</p>
     </div>
     <ul class="footer__contacts contacts">
       <li><a href="https://twitter.com/htmlacademy_ru" class="contacts__link contacts__link--twitter">Twitter</a></li>
@@ -221,7 +228,8 @@
         <li class="popup__feature popup__feature--elevator"></li>
         <li class="popup__feature popup__feature--conditioner"></li>
       </ul>
-      <p class="popup__description">A nice studio in the centre of Tokyo. Perfect for tourists and businesspeople. The flat is fully equipped and recently renovated.</p>
+      <p class="popup__description">A nice studio in the centre of Tokyo. Perfect for tourists and businesspeople. The
+        flat is fully equipped and recently renovated.</p>
       <div class="popup__photos">
         <img src="" class="popup__photo" width="45" height="40" alt="Photos of the housing">
       </div>
@@ -230,7 +238,8 @@
 
   <!-- Listing marker -->
   <template id="pin">
-    <button type="button" class="map__pin" style="left: 200px; top: 400px;"><img src="img/avatars/user07.png" width="40" height="40" draggable="false" alt="Listing marker"></button>
+    <button type="button" class="map__pin" style="left: 200px; top: 400px;"><img src="img/avatars/user07.png" width="40"
+        height="40" draggable="false" alt="Listing marker"></button>
   </template>
 
   <!-- Message for successfully published listing-->
@@ -251,8 +260,11 @@
   <script src="js/util.js"></script>
   <script src="js/pin.js"></script>
   <script src="js/message.js"></script>
+  <script src="js/debounce.js"></script>
   <script src="js/map.js"></script>
+  <script src="js/filter.js"></script>
   <script src="js/form.js"></script>
   <script src="js/card.js"></script>
 </body>
+
 </html>

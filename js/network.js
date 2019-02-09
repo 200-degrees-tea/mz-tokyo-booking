@@ -31,7 +31,7 @@ window.network = (function () {
     },
 
     send: function (data, onSuccess, onError, errBtnHandler) {
-      var sendUrl = 'https://js.dump.academy/keksobookingA';
+      var sendUrl = 'https://js.dump.academy/keksobooking';
       var xhr = new XMLHttpRequest();
       xhr.open('POST', sendUrl);
 
