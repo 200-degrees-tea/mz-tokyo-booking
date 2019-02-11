@@ -163,7 +163,7 @@ window.map = (function () {
 
   function showCard(button) {
     var elementIndex = +button.dataset.index;
-    var listing = filteredData[elementIndex];
+    var listing = filteredData[elementIndex] || data[elementIndex];
     var card = window.card.generateCard(listing);
 
     mapElement.appendChild(card);
