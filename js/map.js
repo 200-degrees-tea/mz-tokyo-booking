@@ -68,7 +68,8 @@ window.map = (function () {
   function receiveDataHandler(responseData) {
     var jsonData = JSON.parse(responseData);
     data = translateData(jsonData);
-    renderPins(data);
+    filteredData = data.slice();
+    renderPins(filteredData);
   }
 
   function applyFilter() {
@@ -163,7 +164,7 @@ window.map = (function () {
 
   function showCard(button) {
     var elementIndex = +button.dataset.index;
-    var listing = filteredData[elementIndex] || data[elementIndex];
+    var listing = filteredData[elementIndex];
     var card = window.card.generateCard(listing);
 
     mapElement.appendChild(card);
