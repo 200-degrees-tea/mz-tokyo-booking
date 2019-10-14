@@ -68,7 +68,8 @@ window.map = (function () {
   function receiveDataHandler(responseData) {
     var jsonData = JSON.parse(responseData);
     data = translateData(jsonData);
-    renderPins(data);
+    filteredData = data.slice();
+    renderPins(filteredData);
   }
 
   function applyFilter() {
