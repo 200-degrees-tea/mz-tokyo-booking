@@ -2,7 +2,7 @@
 window.network = (function () {
   return {
     receive: function (onLoad, onError, errBtnHandler) {
-      var receiveDataUrl = 'https://js.dump.academy/keksobooking/data';
+      var receiveDataUrl = 'https://echo-server-mz.herokuapp.com/tokyo-booking';
       var xhr = new XMLHttpRequest();
 
       function xhrReceiveHandler(event) {
@@ -31,7 +31,7 @@ window.network = (function () {
     },
 
     send: function (data, onSuccess, onError, errBtnHandler) {
-      var sendUrl = 'https://js.dump.academy/keksobooking';
+      var sendUrl = 'https://echo-server-mz.herokuapp.com/tokyo-booking';
       var xhr = new XMLHttpRequest();
       xhr.open('POST', sendUrl);
 
